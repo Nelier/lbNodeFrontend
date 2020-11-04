@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { Grid, Segment, Menu } from 'semantic-ui-react'
+import { Grid, Checkbox, Button, Header, Form, Container } from 'semantic-ui-react';
 
-import Navgation from '../../components/NavBar'
+import api from '../../api/api';
 
-const leftItems = [
-    { as: 'a', content: "Home", key: "home" },
-    { as: 'a', content: "Logar", Key: "Logar" }
-];
-
-const rightItems = [
-    { as: 'a', content: "Registrar", key: "Registrar" }
-];
 
 export default function Home() {
 
+
+    const history = useHistory();
+
+
     return (
-        <Navgation leftItems={leftItems} rightItems={rightItems}>
-            <h3>Children</h3>
-        </Navgation>
+        <div className="login-container" style={{ color: "blue" }}>
+            <Header as="h3" block>
+                Trabalho laboratório de programação.
+            </Header>
+
+            <Container>
+                <h3>Outra Página!</h3>
+            </Container>
+        </div>
     );
 }
