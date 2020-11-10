@@ -11,13 +11,16 @@ import {
 } from "semantic-ui-react";
 
 
-const NavBarDesktop = ({ leftItems, rightItems }) => {
+const NavBarDesktop = (items) => {
     return (
-        <Menu fixed="top" inverted>
+        <Menu fixed="top" vertical>
             <Menu.Item>
                 <Image size="mini" src="https://react.semantic-ui.com/logo.png" />
             </Menu.Item>
-            {leftItems.map((leftItems) => { <Menu.Item {...leftItems} /> })}
+            {/* {items.map(item => {
+                return <Menu.Item {...item} />
+            })} */
+                console.log(items)}
         </Menu>
     )
 };
@@ -34,7 +37,7 @@ export default function NavBar(props) {
 
     const [visible, setVisible] = useState(false);
     const [children, setChildren] = useState(props);
-    const [leftItems, setLeftItems] = useState(props);
+    const [items, setLeftItems] = useState(props.items);
 
     const handlePusher = () => {
         if (visible) setVisible(false);
@@ -44,7 +47,7 @@ export default function NavBar(props) {
 
     return (
         <div>
-            <NavBarDesktop leftItems={leftItems} />
+            <NavBarDesktop items={items} />
             <NavBarChildren>{children}</NavBarChildren>
         </div>
 

@@ -20,6 +20,9 @@ export default function Login() {
 
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/img;
 
+    function cleanStorage() {
+        localStorage.removeItem("idUser");
+    }
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -29,57 +32,55 @@ export default function Login() {
             password,
         }
 
-        if (Email.match(emailRegex)) {
+        try {
+            const response = await api.post("/Login", data);
 
-            try {
-                const response = await api.post("/Login", data);
+            if (response) {
+                setRecivedID(response);
+                localStorage.setItem("idUser", recivedID);
+                history.push("/home")
 
-                if (response) {
-                    setRecivedID(response);
-                    history.push("/home")
-
-                }
-
-            } catch (error) {
-                alert("Problema ao executar requisição!");
             }
 
-        } else {
-            alert("Formato de email invalido!");
+        } catch (error) {
+            alert("Problema ao executar requisição!");
         }
 
     };
 
-    return (
-        <div className="login-container">
-            <Header as="h3" block>
-                Trabalho laboratório de programação.
+
+return (
+    <div className="login-container">
+        {cleanStorage()}
+        <Header as="h3" block>
+            Trabalho laboratório de programação.
             </Header>
 
-            <Container>
-                <Form onSubmit={handleLogin}>
-                    <Form.Field>
-                        <label>Email</label>
-                        <input placeholder='Email ou usuário'
-                            value={Email}
-                            maxLength="80"
-                            onChange={(e) => { setEmail(e.target.value) }}
-                            required="required" />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Senha</label>
-                        <input placeholder='Senha'
-                            type="password"
-                            value={password}
-                            maxLength="18"
-                            onChange={(e) => { setPassword(e.target.value) }} />
-                    </Form.Field>
-                    <Form.Field>
-                        <p>Peça seu cadastro para o RH.</p>
-                    </Form.Field>
-                    <Button type='submit'>Submit</Button>
-                </Form>
-            </Container>
-        </div >
-    );
+        <Container>
+            <Form onSubmit={handleLogin}>
+                <Form.Field>
+                    <label>Email</label>
+                    <input placeholder='Email ou usuário'
+                        value={Email}
+                        maxLength="80"
+                        onChange={(e) => { setEmail(e.target.value) }}
+                        required="required" />
+                </Form.Field>
+                <Form.Field>
+                    <label>Senha</label>
+                    <input placeholder='Senha'
+                        type="password"
+                        value={password}
+                        maxLength="18"
+                        onChange={(e) => { setPassword(e.target.value) }} />
+                </Form.Field>
+                <Form.Field>
+                    <p>Peça seu cadastro para o RH.</p>
+                    <p>Ou use <strong>professor@professor.com</strong> e <strong>professor1</strong></p>
+                </Form.Field>
+                <Button type='submit'>Submit</Button>
+            </Form>
+        </Container>
+    </div >
+);
 }
