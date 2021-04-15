@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/ong"
+  to = "/home"
+  status = 200
+  edge_handler = "filterRequests"
