@@ -63,6 +63,7 @@ export default function Login() {
         try {
             const response = await api.post("/login", data);
 
+            cookie.remove("id_user");
             // localStorage.setItem("id_user", response.data.id_user);
             cookie.set("id_user", response.data.id_user, { expires: new Date(moment().add(30, "m").format()) })
             setTimeout(() => {

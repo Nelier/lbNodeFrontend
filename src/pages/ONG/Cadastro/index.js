@@ -76,13 +76,14 @@ export default function Register() {
                     console.log(data2);
                     localStorage.setItem('id_user', response.data.id_user);
 
-                    history.push("/signup/step2");
+                    
 
                     try {
 
                         const response2 = await api.post('lgpd', data2, { headers: { authorization: true } })
 
-                        alert("lgpd cadastrada!")
+                        
+                        history.push("/ong/signup/step2");
                     } catch (error) {
                         alert("Erro inesperado no cadastro!");
                     }
@@ -104,11 +105,39 @@ export default function Register() {
 
     async function handleSumbitMobile() {
 
-        // try {
+        const data = {
+            user_name: username,
+            email_user: email,
+            password,
+        }
+
+        try {
 
         if (password == passwordCon) {
             if (personal_data == true && sensitive_data == true && cookies == true) {
-                return alert("api call!");
+                const response = await api.post("/singup/user", data, { headers: { authorization: true } })
+
+                    console.log("user cadastrado!");
+
+                    const data2 = {
+                        id_user: response.data.id_user,
+                        personal_data,
+                        sensitive_data,
+                        use_data,
+                        cookies,
+                    }
+
+                    console.log(data2);
+                    localStorage.setItem('id_user', response.data.id_user);
+
+                    try {
+
+                        const response2 = await api.post('lgpd', data2, { headers: { authorization: true } })
+                        
+                        history.push("/ong/signup/step2");
+                    } catch (error) {
+                        alert("Erro inesperado no cadastro!");
+                    }
             } else {
                 setActiveErrorMobile(false);
                 setMessageMobile("Algumas informações de privacidade obrigatórias não foram aceitas.")
@@ -119,10 +148,10 @@ export default function Register() {
             setMessageMobile("As senhas não coincidem, por favor verifique para prosseguir.")
         }
 
-        // } catch (error) {
-        //     setActiveError(false);
-        //     setMessage("Algumas informações cadastradas já existem, por favor tente novamente!")
-        // }
+        } catch (error) {
+            setActiveErrorMobile(false);
+            setMessageMobile("Algumas informações cadastradas já existem, por favor tente novamente!")
+        }
     }
 
     return (
@@ -166,7 +195,7 @@ export default function Register() {
                                         </Step.Group>
                                     </Header>
                                     <div style={{ margin: "10px" }}>
-                                        Faça sua Incrição
+                                        Faça sua Inscrição
 </div>
                                 </Card.Header>
 
@@ -407,7 +436,7 @@ export default function Register() {
                                         </Step.Group>
                                     </Header>
                                     <div style={{ margin: "10px" }}>
-                                        Faça sua Incrição
+                                        Faça sua Inscrição
                         </div>
                                 </Card.Header>
 

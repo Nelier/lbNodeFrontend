@@ -69,7 +69,7 @@ export default function ProfileEdit() {
                             maxLength="800"
                             onChange={(e) => {
                                 e.preventDefault();
-                                setDescription(e.target.value);
+                                setNecessities(e.target.value);
                             }}
                             value={necessities}></TextArea>
                     </Tab.Pane>)
@@ -133,28 +133,32 @@ export default function ProfileEdit() {
                 console.log(error);
                 alert("Ouve um erro inesperado ao deletar sua conta!");
             })
+    }
 
+    async function handleChange(){
+        const data = {
+            userID: id_user,
+            description,
+            necessities,
+        }
 
+        const data2 ={
+            url: "http://localhost:3000/ong/profile"
+        }
 
+        try {
+            const response = await api.put('/singup', data, {headers:{authorization: true}})
 
-        // try {
-        //     const response2 = await api.post('/newsletter/delete', data);
+            alert("Suas alterações foram salvas!");
+            try {
+                const response2 = await api.post(`/email/mailer/${id_ong}`, data2, {headers:{authorization: true}})
+            } catch (error) {
+                alert("erro na newsletter!");
+            }
 
-        //     try {
-        //         const response3 = await api.post('/lgpd/delete', data);
-
-        //         
-
-        //     } catch (error) {
-        //         console.log(error);
-        //         alert("Ouve um erro inesperado ao deletar sua conta!");
-        //     }
-        // } catch (error) {
-        //     console.log(error);
-        //     alert("Ouve um erro inesperado ao deletar sua conta!");
-        // }
-
-
+        } catch (error) {
+            alert("Problemas ao alterar!");
+        }
     }
 
     return (
@@ -228,7 +232,7 @@ export default function ProfileEdit() {
                                                 }}
                                                 value={description}></TextArea>
                                         </Grid.Row>
-                                        <Grid.Row style={{ paddingLeft: "15px", paddingRight: "10px" }}>
+                                        <Grid.Row  style={{ paddingLeft: "15px", paddingRight: "10px" }}>
                                             <Header as="h3">Nossas necessidades</Header>
 
                                             <TextArea
@@ -240,6 +244,8 @@ export default function ProfileEdit() {
                                                 }}
                                                 value={necessities}></TextArea>
                                         </Grid.Row>
+
+                                        <Button color="green" onClick={()=>{handleChange()}} >Salvar Alterações</Button>
                                     </Grid>
 
                                 </Segment>
@@ -297,6 +303,7 @@ export default function ProfileEdit() {
                                 </Segment>
                                 <Segment style={{ minHeight: "500px" }}>
                                     <Tab menu={{ secondary: true, pointing: true }} panes={panes} />
+                                    <Button style={{paddingTop:"10px", float:"right"}} color="green" onClick={()=>{handleChange()}} >Salvar Alterações</Button>
                                 </Segment>
                             </Segment.Group>
                         </Grid.Row>

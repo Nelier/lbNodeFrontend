@@ -176,14 +176,14 @@ export default function Recover2() {
                                         <Grid.Row>
                                             <Message
                                                 positive
-                                                header="Senha Alterada!"
-                                                content={"Sua senha foi alterada com sucesso!"}
+                                                header="Código Enviado!"
+                                                content={"Enviamos seu código para seu email! Caso não o receba repita este processo."}
                                                 hidden={activeSuccess}
                                                 style={{ marginBottom: "5px" }}
                                             />
                                         </Grid.Row>
 
-                                        <Header textAlign="center">Receber meu cógio</Header>
+                                        <Header textAlign="center">Receber meu código</Header>
                                         <p style={{ textAlign: "center" }}>Enviaremos o código de recuperação para o seu email.</p>
 
                                         <Form style={{ paddingLeft: "20px" }} onSubmit={() => { handleSumbit() }}>

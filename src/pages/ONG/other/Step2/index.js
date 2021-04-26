@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import queryString from 'query-string'
 
-import { Grid, Checkbox, Image, Button, Divider, Segment, Item, Step, Dropdown, Sidebar, Header, Form, Res, Container, Menu, GridRow, Icon, GridColumn, Advertisement, Card } from 'semantic-ui-react';
+import { Grid, Checkbox,Message, Input
+    , Button, Divider, Segment, Item, Step, TextArea, Dropdown, Sidebar, Header, Form, Res, Container, Menu, GridRow, Icon, GridColumn, Advertisement, Card } from 'semantic-ui-react';
 
 import MenuResponsive from '../../../../components/MenuResponsive'
 import api from '../../../../api/api';
@@ -16,10 +17,84 @@ const items = [
 
 export default function Step2() {
 
+    const [nameInput, setNameInput] = useState("");
+    const [name_fantasy, setNameFantasy] = useState("");
+    const [email_ong, setEmailONG] = useState("");
+    const [cnpj, setCNPJ] = useState("");
+    const [cidade, setCidade] = useState("");
+    const [UF, setUF] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [bairro, setBairro] = useState("");
+    const [rua, setRua] = useState("");
+    const [cep, setCep] = useState("");
+
+    const [description, setDescription] = useState("");
+    const [necessities, setNecessities] = useState("");
+
     const [personal_data, setPersonal_data] = useState(false);
     const [sensitive_data, setSensitive_data] = useState(false);
     const [use_data, setuse_data] = useState(false);
     const [cookies, setcookies] = useState(false);
+
+    const [activeError, setActiveError] = useState(true);
+    const [messageError, setMessage] = useState("");
+    const [activeErrorMobile, setActiveErrorMobile] = useState(true);
+    const [messageErrorMobile, setMessageMobile] = useState("");
+
+    const id_user = localStorage.getItem('id_user');
+    const history = useHistory();
+
+    async function HandleSumbit(){
+        const data={
+            id_user,
+            name: nameInput,
+            name_fantasy,
+            email_ong,
+            cnpj,
+            cel_number: telefone,
+            cidade,
+            uf: UF,
+            bairro,
+            rua,
+            cep,
+            description,
+            necessities
+
+        }
+        try {
+            const response = api.post('/singup/ong', data, {headers:{authorization: true}})
+            history.push("/ong/signup/step3");
+        } catch (error) {
+            setActiveError(false);
+            setMessage("Estas informações já existem em noss banco de dados!");
+        }
+    }
+
+    async function HandleSumbitMobile(){
+        const data={
+            id_user,
+            name: nameInput,
+            name_fantasy,
+            email_ong,
+            cnpj,
+            cel_number: telefone,
+            cidade,
+            uf: UF,
+            bairro,
+            rua,
+            cep,
+            description,
+            necessities
+
+        }
+        try {
+            const response = api.post('/singup/ong', data, {headers:{authorization: true}})
+            history.push("/ong/signup/step3");
+        } catch (error) {
+            setActiveErrorMobile(false);
+            setMessageMobile("Estas informações já existem em noss banco de dados!");
+        }
+    }
 
     return (
         <div>
@@ -30,7 +105,246 @@ export default function Step2() {
 
                 <Grid.Row only="mobile" style={{ paddingLeft: "25px", paddingTop: "25px" }}>
 
+                <Container>
 
+<Card raised fluid>
+
+    <Card.Content>
+        <Card.Header>
+            <Header style={{ padding: "10px", paddingLeft: "5%", paddingRight: "auto" }} >
+                <Step.Group>
+                    <Step completed>
+                        <Icon name="user" />
+                        <Step.Content>
+                            <Step.Title>Usuário</Step.Title>
+                            <Step.Description>Informações do usuário administrador da ONG</Step.Description>
+                        </Step.Content>
+                    </Step>
+                    <Step active>
+                        <Icon name="address card" />
+                        <Step.Content>
+                            <Step.Title>Sua ONG</Step.Title>
+                            <Step.Description>Informações da sua ONG</Step.Description>
+                        </Step.Content>
+                    </Step>
+                    <Step>
+                        <Icon name="clipboard check" />
+                        <Step.Content>
+                            <Step.Title>Privacidade</Step.Title>
+                            <Step.Description>Aceitar nossos termos de privacidade e de serviço</Step.Description>
+                        </Step.Content>
+                    </Step>
+                </Step.Group>
+            </Header>
+            <div style={{ margin: "10px" }}>
+                Faça sua Inscrição
+</div>
+        </Card.Header>
+
+        <Segment basic>
+            <Grid  relaxed="very">
+
+                <Grid.Row>
+                <Grid.Row>
+                        <Message
+                            error
+                            header="Ops.. Ouve um problema!"
+                            content={messageError}
+                            hidden={activeError}
+                            style={{ marginBottom: "10px", margimTop: "0px", maxWidth: "400px" }}
+                        />
+                    </Grid.Row>
+                    <Form style={{ paddingLeft: "7%", paddingRight: "10%", width: "100%" }} onSubmit={() => { HandleSumbit() }}>
+
+                        <Form.Group>
+                            <Form.Field required width="9">
+                                <label>Nome da Organização</label>
+                                <input placeholder='Usuário'
+                                    maxLength="50"
+                                    value={nameInput}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setNameInput(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                            <Form.Field required width="7">
+                                <label>Nome fantasia</label>
+                                <input placeholder='Usuário'
+                                    maxLength="50"
+                                    value={name_fantasy}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setNameFantasy(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Field required width="9" required>
+                                <label>Email</label>
+                                <input placeholder='Curso'
+                                    maxLength="400"
+                                    value={email_ong}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setEmailONG(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                            <Form.Field required width="7">
+                                <label>CNPJ</label>
+                                <input
+                                    value={cnpj}
+                                    maxLength="14"
+                                    onChange={(e) => {
+                                        let aux = e.target.value;
+                                        let value = aux.replace(/\D/g, '');
+                                        setCNPJ(value);
+
+                                    }}
+                                />
+                            </Form.Field>
+                        </Form.Group>
+                        <Form.Group widths="equal">
+                            <Form.Field required width="5">
+                                <label>Cidade</label>
+                                <input placeholder='Email ou usuário'
+                                    maxLength="80"
+                                    value={cidade}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setCidade(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                            <Form.Field required width="5">
+                                <label>UF</label>
+                                <input placeholder='Email ou usuário'
+                                    maxLength="2"
+                                    value={UF}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setUF(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                            <Form.Field required width="7">
+                                <label>Telefone</label>
+                                <input
+                                    placeholder="(xx) xxxxx-xxxx"
+                                    maxLength="11"
+                                    value={telefone}
+                                    onChange={(e) => {
+                                        let aux = e.target.value;
+                                        let value = aux.replace(/\D/g, '');
+                                        setTelefone(value)
+
+                                    }}
+                                />
+                            </Form.Field>
+                        </Form.Group>
+                        <Form.Group widths="equal">
+                            <Form.Field required width="5">
+                                <label>Bairro</label>
+                                <input placeholder='Email ou usuário'
+                                    maxLength="80"
+                                    value={bairro}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setBairro(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                            <Form.Field required width="5">
+                                <label>Rua</label>
+                                <input placeholder='Email ou usuário'
+                                    maxLength="80"
+                                    value={rua}
+                                    onChange={(e)=>{
+                                        e.preventDefault();
+                                        setRua(e.target.value);
+                                    }}
+                                    required="required" />
+                            </Form.Field>
+                            <Form.Field required width="7">
+                                <label>CEP</label>
+                                <input
+                                    placeholder="(xx) xxxxx-xxxx"
+                                    maxLength="8"
+                                    value={cep}
+                                    onChange={(e) => {
+                                        let aux = e.target.value;
+                                        let value = aux.replace(/\D/g, '');
+                                        setCep(value);
+
+                                    }}
+                                />
+                            </Form.Field>
+                        </Form.Group>
+                        <Card.Content extra>
+                            <div style={{ float: "right" }}>
+                                <Button color='black'>
+                                    Cancel
+                                </Button>
+                                <Button color='green' type="sumbit" >
+                                    Cadastrar
+                                </Button>
+                            </div>
+                        </Card.Content>
+
+                    </Form>
+
+                </Grid.Row>
+
+                <Grid.Row>
+
+                    <Segment color="red" style={{ marginLeft: "5%", marginRight: "5%", width: "100%", paddingLeft: "6%", paddingRight: "10%", height: "400px", overflowY: "scroll" }}>
+
+                        <Header>Suas informações</Header>
+                        <p>Digite algumas informações que serão exibidas quando entrarem na página principal da sua ONG.</p>
+
+                        <Segment raised>
+                            <Header>Escreva um pouco sobre sua Organização <span style={{ color: "red" }}>*</span></Header>
+                            <TextArea
+                            style={{ width: "80%", minHeight: "500px", padding: "5px" }}
+                            maxLength="800"
+                            value={description}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                setDescription(e.target.value);
+                            }}
+                            />
+                        </Segment>
+
+                        <Segment raised>
+                            <Header>Diga um pouco das suas necessidades <span style={{ color: "red" }}>*</span></Header>
+                            <TextArea
+                            style={{ width: "80%", minHeight: "500px", padding: "5px" }}
+                            maxLength="800"
+                            value={necessities}
+                            onChange={(e) => {
+                                e.preventDefault();
+                                setNecessities(e.target.value);
+                            }}
+                            />
+                        </Segment>
+
+                    </Segment>
+
+                </Grid.Row>
+
+            </Grid>
+
+            
+        </Segment>
+
+    </Card.Content>
+
+</Card>
+
+
+</Container>
 
                 </Grid.Row>
 
@@ -68,7 +382,7 @@ export default function Step2() {
                                         </Step.Group>
                                     </Header>
                                     <div style={{ margin: "10px" }}>
-                                        Faça sua Incrição
+                                        Faça sua Inscrição
                         </div>
                                 </Card.Header>
 
@@ -76,44 +390,62 @@ export default function Step2() {
                                     <Grid columns={2} relaxed="very">
 
                                         <Grid.Column>
-
-                                            <Form onSubmit={() => { return null }}>
+                                        <Grid.Row>
+                                                <Message
+                                                    error
+                                                    header="Ops.. Ouve um problema!"
+                                                    content={messageError}
+                                                    hidden={activeError}
+                                                    style={{ marginBottom: "10px", margimTop: "0px", maxWidth: "400px" }}
+                                                />
+                                            </Grid.Row>
+                                            <Form onSubmit={() => { HandleSumbit() }}>
 
                                                 <Form.Group>
-                                                    <Form.Field width="9">
+                                                    <Form.Field required width="9">
                                                         <label>Nome da Organização</label>
-                                                        <input placeholder='Usuário'
-
+                                                        <input placeholder='Nome'
                                                             maxLength="50"
-
+                                                            value={nameInput}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setNameInput(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
-                                                    <Form.Field width="7">
+                                                    <Form.Field required width="7">
                                                         <label>Nome fantasia</label>
-                                                        <input placeholder='Usuário'
-
+                                                        <input placeholder='Nome fantasia'
                                                             maxLength="50"
-
+                                                            value={name_fantasy}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setNameFantasy(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
                                                 </Form.Group>
                                                 <Form.Group>
-                                                    <Form.Field width="9" required>
+                                                    <Form.Field required width="9" required>
                                                         <label>Email</label>
-                                                        <input placeholder='Curso'
-
+                                                        <input placeholder='Email'
                                                             maxLength="400"
-
+                                                            value={email_ong}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setEmailONG(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
-                                                    <Form.Field width="7">
+                                                    <Form.Field required width="7">
                                                         <label>CNPJ</label>
                                                         <input
-
+                                                            value={cnpj}
                                                             maxLength="14"
                                                             onChange={(e) => {
                                                                 let aux = e.target.value;
                                                                 let value = aux.replace(/\D/g, '');
+                                                                setCNPJ(value);
 
                                                             }}
                                                         />
@@ -122,28 +454,36 @@ export default function Step2() {
                                                 <Form.Group widths="equal">
                                                     <Form.Field required width="5">
                                                         <label>Cidade</label>
-                                                        <input placeholder='Email ou usuário'
-
+                                                        <input placeholder='São paulo'
                                                             maxLength="80"
-
+                                                            value={cidade}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setCidade(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
                                                     <Form.Field required width="5">
                                                         <label>UF</label>
-                                                        <input placeholder='Email ou usuário'
-
+                                                        <input placeholder='SP'
                                                             maxLength="2"
-
+                                                            value={UF}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setUF(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
-                                                    <Form.Field width="7">
+                                                    <Form.Field required width="7">
                                                         <label>Telefone</label>
                                                         <input
                                                             placeholder="(xx) xxxxx-xxxx"
                                                             maxLength="11"
+                                                            value={telefone}
                                                             onChange={(e) => {
                                                                 let aux = e.target.value;
                                                                 let value = aux.replace(/\D/g, '');
+                                                                setTelefone(value)
 
                                                             }}
                                                         />
@@ -152,28 +492,36 @@ export default function Step2() {
                                                 <Form.Group widths="equal">
                                                     <Form.Field required width="5">
                                                         <label>Bairro</label>
-                                                        <input placeholder='Email ou usuário'
-
+                                                        <input placeholder='Bairro'
                                                             maxLength="80"
-
+                                                            value={bairro}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setBairro(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
                                                     <Form.Field required width="5">
                                                         <label>Rua</label>
-                                                        <input placeholder='Email ou usuário'
-
+                                                        <input placeholder='Rua'
                                                             maxLength="80"
-
+                                                            value={rua}
+                                                            onChange={(e)=>{
+                                                                e.preventDefault();
+                                                                setRua(e.target.value);
+                                                            }}
                                                             required="required" />
                                                     </Form.Field>
-                                                    <Form.Field width="7">
+                                                    <Form.Field required width="7">
                                                         <label>CEP</label>
                                                         <input
                                                             placeholder="(xx) xxxxx-xxxx"
                                                             maxLength="8"
+                                                            value={cep}
                                                             onChange={(e) => {
                                                                 let aux = e.target.value;
                                                                 let value = aux.replace(/\D/g, '');
+                                                                setCep(value);
 
                                                             }}
                                                         />
@@ -198,107 +546,34 @@ export default function Step2() {
 
                                             <Segment color="red" style={{ width: "100%", height: "400px", overflowY: "scroll" }}>
 
-                                                <Header>Opções de Privacidade do usuário </Header>
-                                                <p><span style={{ color: "red" }}>*</span> Algumas opções <strong>são</strong> obrigatórias para que seja possível prossegir</p>
-                                                <p><span style={{ color: "red" }}>*</span> Todas as opções <strong>não</strong> obrigatórias podem ser alteradas na sua página de configuração, as obrigatórias necessitam que você exclua seu cadastro</p>
+                                                <Header>Suas informações</Header>
+                                                <p>Digite algumas informações que serão exibidas quando entrarem na página principal da sua ONG.</p>
 
                                                 <Segment raised>
-                                                    <Header>Permitir que usemos seus dados pessoais <span style={{ color: "red" }}>*</span></Header>
-                                                    <Grid columns={2}>
-
-                                                        <Grid.Column width="10">
-
-                                                            <p>Esses dados são necessários para o funcionamento básico do seu cadastro
-                                                            e sua conta não poderá ser criada se não aceita-los. Utilizaremos para garantir
-                                                suas credenciais de acesso ao logar.</p>
-                                                        </Grid.Column>
-
-                                                        <Grid.Column textAlign="center" verticalAlign="middle" width="5">
-                                                            <Segment raised>
-                                                                <Checkbox toggle checked={personal_data} onChange={
-                                                                    (e) => {
-                                                                        setPersonal_data(!personal_data);
-                                                                        console.log(personal_data);
-                                                                    }
-                                                                } />
-                                                            </Segment>
-                                                        </Grid.Column>
-                                                    </Grid>
+                                                    <Header>Escreva um pouco sobre sua Organização <span style={{ color: "red" }}>*</span></Header>
+                                                    <TextArea
+                                                    style={{ width: "80%", minHeight: "500px", padding: "5px" }}
+                                                    maxLength="800"
+                                                    value={description}
+                                                    onChange={(e) => {
+                                                        e.preventDefault();
+                                                        setDescription(e.target.value);
+                                                    }}
+                                                    />
                                                 </Segment>
 
                                                 <Segment raised>
-                                                    <Header>Permitir que usemos seus dados sensíveis <span style={{ color: "red" }}>*</span></Header>
-                                                    <Grid columns={2}>
-
-                                                        <Grid.Column width="10">
-
-                                                            <p>Esses dados incluem sexo, cpf, religião, endereço, estado, cnpj, entre outros, e são
-                                                            necessários para funcionamento básico ao exibir sua ong, sua conta não poderá ser criada
-                                                            se não aceitá-los. Utilizaremos para guardarmos sua conta de modo seguro para que possamos
-                                                garantir integridade legal e evitar cadastros duplicados.</p>
-                                                        </Grid.Column>
-
-                                                        <Grid.Column textAlign="center" verticalAlign="middle" width="5">
-                                                            <Segment raised>
-                                                                <Checkbox toggle checked={sensitive_data} onChange={
-                                                                    (e) => {
-                                                                        setSensitive_data(!sensitive_data);
-                                                                        console.log(sensitive_data);
-                                                                    }
-                                                                } />
-                                                            </Segment>
-                                                        </Grid.Column>
-                                                    </Grid>
+                                                    <Header>Diga um pouco das suas necessidades <span style={{ color: "red" }}>*</span></Header>
+                                                    <TextArea
+                                                    style={{ width: "80%", minHeight: "500px", padding: "5px" }}
+                                                    maxLength="800"
+                                                    value={necessities}
+                                                    onChange={(e) => {
+                                                        e.preventDefault();
+                                                        setNecessities(e.target.value);
+                                                    }}
+                                                    />
                                                 </Segment>
-
-                                                <Segment raised >
-                                                    <Header>Permitir uso de cookies <span style={{ color: "red" }}>*</span></Header>
-                                                    <Grid columns={2}>
-
-                                                        <Grid.Column width="10">
-
-                                                            <p>Esses dados são necessários para o funcionamento básico do seu cadastro.
-                                                Nossas páginas podem utilizar cookies para eficiencia da página e para manter sua sessão conectada ao logar</p>
-                                                        </Grid.Column>
-
-                                                        <Grid.Column textAlign="center" verticalAlign="middle" width="5">
-                                                            <Segment raised>
-                                                                <Checkbox toggle checked={cookies} onChange={
-                                                                    (e) => {
-                                                                        setcookies(!cookies);
-                                                                        console.log(cookies);
-                                                                    }
-                                                                } />
-                                                            </Segment>
-                                                        </Grid.Column>
-                                                    </Grid>
-                                                </Segment>
-
-                                                <Segment raised>
-                                                    <Header>Permitir que coletemos seus dados de uso</Header>
-                                                    <Grid columns={2}>
-
-                                                        <Grid.Column width="10">
-
-                                                            <p>Esses dados <strong>não</strong> são necessários para o funcionamento básico do seu cadastro.
-                                                Se aceita-los utilizaremos seus dados de forma anônima para que não seja possível identifica-lo, e
-                                                irão melhorar nossas análises de como estão sendo utilizado os recursos do site.</p>
-                                                        </Grid.Column>
-
-                                                        <Grid.Column textAlign="center" verticalAlign="middle" width="5">
-                                                            <Segment raised>
-                                                                <Checkbox toggle checked={use_data} onChange={
-                                                                    (e) => {
-                                                                        setuse_data(!use_data);
-                                                                        console.log(use_data);
-                                                                    }
-                                                                } />
-                                                            </Segment>
-                                                        </Grid.Column>
-                                                    </Grid>
-                                                </Segment>
-
-
 
                                             </Segment>
 
